@@ -1,0 +1,94 @@
+
+valor = [' ',' ',' ',' ',' ',' ',' ',' ',' '] #matriz jogo da velha
+
+def display(valor):                           #função para preencher a matriz
+    print(valor[0] + '|' + valor[1] + '|' + valor[2])
+    print("____")
+    print(valor[3] + '|' + valor[4] + '|' + valor[5])
+    print("____")
+    print(valor[6] + '|' + valor[7] + '|' + valor[8])
+
+
+def jogador(): # definir símbolo para cada jogador
+    marker = ''
+    escolha = input('Jogador 1 escolha X ou O:').upper()
+    if escolha == 'X':
+        return ('X','O')
+    else:
+        return ('O','X')
+    
+def user_escolha(valor, marker, posiçao): #escolher posição no jogo da velha
+    valor[posiçao] = marker
+
+def vitoria(marker, valor): #condição de vitória
+    if ((valor[0] == marker and valor[1] == marker and valor[2] == marker) or
+    (valor[3] == marker and valor[4] == marker and valor[5] == marker) or
+    (valor[6] == marker and valor[7] == marker and valor[8] == marker) or
+    (valor[0] == marker and valor[3] == marker and valor[6] == marker) or
+    (valor[1] == marker and valor[4] == marker and valor[7] == marker) or 
+    (valor[2] == marker and valor[5] == marker and valor[8] == marker) or
+    (valor[0] == marker and valor[4] == marker and valor[8] == marker) or
+    (valor[2] == marker and valor[4] == marker and valor[6] == marker)):
+        return True
+    else:
+        return False
+    
+
+def espaço_check(valor, posiçao):
+    return valor[posiçao] == ' '
+
+def preenchido_check(valor):
+    for i in range(0,9):
+        if espaço_check(valor,i):
+            return False
+    return True
+
+def jogador_posiçao(valor):
+    posiçao = 10 
+    while posiçao not in [0,1,2,3,4,5,6,7,8] or not espaço_check(valor, posiçao):
+        posiçao = int(input('Escolha a posição:'))
+    return posiçao
+########################################################################################
+
+jogador1_marker, jogador2_marker = jogador()
+game = 'on'
+while game == 'on':
+    
+    turn = 'Jogador1'
+
+    if turn == 'Jogador1':
+        display(valor)
+        posiçao_escolhida = jogador_posiçao(valor)
+        user_escolha(valor,jogador1_marker,posiçao_escolhida)
+        display(valor)
+
+        if vitoria(jogador1_marker,valor):
+            display(valor)
+            print('Jogador 1 ganhou')
+            game = 'off'
+        else:
+            if preenchido_check(valor):
+                display(valor)
+                print('Empate')
+                game = 'off'
+            else:
+                turn = 'Jogador2'
+                print('Vez do Jogador 2')
+    else:
+        display(valor)
+        posiçao_escolhida = jogador_posiçao(valor)
+        user_escolha(valor,jogador2_marker,posiçao_escolhida)
+        display(valor)
+
+        if vitoria(jogador2_marker,valor):
+            display(valor)
+            print('Jogador 2 ganhou')
+            game = 'off'
+        else:
+            if preenchido_check(valor):
+                display(valor)
+                print('Empate')
+                game = 'off'
+            else:
+                turn ='Jogador1'
+                print('Vez do Jogador 1')
